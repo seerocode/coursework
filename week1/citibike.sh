@@ -10,9 +10,6 @@ sed 1d 201402-citibike-tripdata.csv | cut -d, -f4,8 | tr , '\n' | sort | uniq -c
 sed 1d 201402-citibike-tripdata.csv | cut -d, -f12 | sort | uniq -c | wc -l
 
 # count the number of trips per day
-sed 1d 201402-citibike-tripdata.csv | cut -d, -f2 | cut -c10-11 | uniq -c
-
-#for full date: 
 sed 1d 201402-citibike-tripdata.csv | cut -d, -f2 | cut -c2-11 | uniq -c
 
 # find the day with the most rides

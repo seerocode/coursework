@@ -111,9 +111,9 @@ trips %>%
   labs(caption = "(based on Citibike data from Feb 2014)") + # caption of graph
   labs(x = "Hour trip started (24 hours)", y="Avg # of Trips for Hour") # x and y labels
 
-#what are the destinations for midnight?
+#what are the destinations for midnight? by gender?
 trips %>% 
   mutate(trip_date = as.Date(trips$starttime)) %>% 
   mutate(trip_start_hr = hour(trips$starttime)) %>% 
-  group_by(trip_start_hr, start_station_name, end_station_name) %>% 
-  summarise(avg_trips_perhour_perday = mean(n()/28)) %>% View
+  group_by(trip_start_hr[1], start_station_name, end_station_name, gender) %>% 
+  summarise(count = n()) %>% arrange(desc(count)) %>% View

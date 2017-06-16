@@ -106,9 +106,6 @@ Install tools: [Ubuntu on Windows](https://msdn.microsoft.com/en-us/commandline/
 	* Sean Anderson's [dplyr and pipes examples](http://seananderson.ca/2014/09/13/dplyr-intro.html) ([code](https://github.com/seananderson/dplyr-intro-2014) on github)
 	* Rstudio's [data wrangling cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
 
-
-<<<<<<< HEAD
-<!--
 =======
 ## Plotting
   * Review [visualization_with_ggplot2.ipynb](visualization_with_ggplot2.ipynb) for an introduction to data visualization with ggplot2
@@ -175,9 +172,6 @@ Install tools: [Ubuntu on Windows](https://msdn.microsoft.com/en-us/commandline/
   	2. `git pull upstream master` to grab changes from this repository, and resolve any merge conflicts, commiting the final results.
   	3. `git push origin master` to push things back up to your GitHub fork of the course repository. 
 
-
-<!--
-
 https://www.datacamp.com/courses/data-visualization-with-ggplot2-2
 
 https://www.datacamp.com/courses/exploratory-data-analysis-in-r-case-study
@@ -188,8 +182,6 @@ https://www.datacamp.com/courses/intermediate-r
 https://www.datacamp.com/courses/writing-functions-in-r
 https://www.datacamp.com/courses/reporting-with-r-markdown
 
-<<<<<<< HEAD
->>>>>>> b97a63ca44d42825428c0d1694ffcf0103f19d9a
   * Plotting
     * Read the [data visualization](http://r4ds.had.co.nz/data-visualisation.html) of ["R for Data Science"](http://r4ds.had.co.nz) chapter and go over the included exercises
     * Review Sean Anderson's [ggplot2 slides](http://seananderson.ca/courses/12-ggplot2/ggplot2_slides_with_examples.pdf) ([code]((http://github.com/seananderson/datawranglR)) and reproduce the ``diamonds`` plots in these slides.
@@ -201,8 +193,6 @@ https://www.datacamp.com/courses/reporting-with-r-markdown
     * [Intro to ggplot2](http://superbobry.github.io/slides/ggplot2/) slides, with somewhat tricky navigation
     * [Visualizing Data with ggplot2](http://varianceexplained.org/RData/lessons/lesson2/)
     * The [official ggplot2 docs](http://docs.ggplot2.org/current/)
-<<<<<<< HEAD
-=======
 
 * Chapters [3](http://r4ds.had.co.nz/data-visualisation.html), [7](http://r4ds.had.co.nz/exploratory-data-analysis.html), and [28](http://r4ds.had.co.nz/graphics-for-communication.html) in [R for Data Science](http://r4ds.had.co.nz/)
 * RStudio's [ggplot2 cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
@@ -210,11 +200,6 @@ https://www.datacamp.com/courses/reporting-with-r-markdown
 * Videos on [Visualizing Data with ggplot2](http://varianceexplained.org/RData/lessons/lesson2/)
 * Sean Anderson's [ggplot2 slides](http://seananderson.ca/courses/12-ggplot2/ggplot2_slides_with_examples.pdf) ([code]((http://github.com/seananderson/datawranglR))) for more examples
 * The [official ggplot2 docs](http://docs.ggplot2.org/current/)
-
->>>>>>> b97a63ca44d42825428c0d1694ffcf0103f19d9a
-=======
->>>>>>> 1ba8aaa08b49d72757995d047d0faa0ef446c919
--->
 
 
 

@@ -106,6 +106,7 @@ obs_0 = 3
 obs_max = 100
 obs_vec <- seq(obs_0, obs_max, 1)
 obs_count <- length(obs_vec)
+quant_sample <- rep(0, 500)
 
 #Create dataframe to store our observations
 sim_power<- NULL
@@ -117,6 +118,7 @@ colnames(sim_power) <- c("Number_Obs","mean","st_error", "fifth_percent")
 sample_means <- NULL
 sample_means = rep(0,total_samps)
 
+for (iterate_samples in 1:500) {
 for (j in 1:obs_count) {
   for (i in 1:total_samps) {
   subsample <- c(sample(X[,1], sim_power[j,1]))
@@ -127,9 +129,20 @@ for (j in 1:obs_count) {
   sim_power[j,4] <- quantile(sample_means, 0.05) #5 percent of the mean at sample size (max 100) would be at this percentile
 }
 
-sim_power %>%
+tmp <- sim_power %>%
   filter(fifth_percent>=9) %>% #all sample sizes where the fifth percentile is greater than or equal to 9
-  filter(fifth_percent==min(fifth_percent)) %>% View
+  summarise(fifth_percent==min("Number_Obs"))
+
+quant_sample[iterate_samples] <- tmp[1,1]
+
+}
+
+df <- data.frame(quant_sample)
+
+View(df)
+
+df %>% summarise(min_sample_size = avg(quant_sample)) %>% View #get average of sample size
+
 
 
 # Question: Take a normal distribution with mu = 10 and variance of 9 (e.g., standard deviation of 3).  Simulate a population of 10,000.  What is the sample size needed to make the standard error of the sample mean sufficiently small so that no more than 5% of the sample means are less 9?

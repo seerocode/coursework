@@ -30,7 +30,7 @@ library(reshape2)
 #colnames(mydata)[1-17]
 X <- NULL
 # Create a variable n which is the number of observations we'll look at.  
-n = 1000
+n = 10000
 
 #The variable p will be the width of that variable.  
 p = 2
@@ -44,8 +44,8 @@ head(X)
 hist(X[,1])
 
 #NOTE: if you wanted to draw from something with a non-zero mean and more interesting variance that's: rnorm(n*p)*st_dev + mu
-st_dev <- 2
-mu <- 50
+st_dev <- 3
+mu <- 10
 
 X[,1] <- X[,1]*st_dev + mu
 X <-data.frame(X)
@@ -54,7 +54,7 @@ ggplot(X,aes(X[,1])) + geom_histogram(binwidth=1)
 
 # So Jacob made this data up.  We know that the mean is 50.  There is a really nice function in R called "sample" which lets us take a random sub sample of our data say I'd like to take a sample of 25 observations 
 obs = 25
-total_samps = 100
+total_samps = 30
 #sample_means = matrix(0, total_samps, 1)
 sample_means = rep(0,total_samps)
 
@@ -94,9 +94,42 @@ for (j in 1:obs_count) {
   sim_power[j,3] <- st_dev/(sim_power[j,1]^.5)
 }
 
+quant <- quantile(sim_power$mean)
 
 ggplot(sim_power, aes(Number_Obs)) + geom_line(aes(y=mean),colour = "blue") 
 ggplot(sim_power, aes(Number_Obs)) + geom_line(aes(y=st_error),colour = "red")
+
+
+###### TEST
+
+obs_0 = 3
+obs_max = 100
+obs_vec <- seq(obs_0, obs_max, 1)
+obs_count <- length(obs_vec)
+
+#Create dataframe to store our observations
+sim_power<- NULL
+sim_power = matrix(0, obs_count, 4)
+sim_power[,1]<-obs_vec
+sim_power <- data.frame(sim_power)
+colnames(sim_power) <- c("Number_Obs","mean","st_error", "fifth_percent")
+#Reset sample_means
+sample_means <- NULL
+sample_means = rep(0,total_samps)
+
+for (j in 1:obs_count) {
+  for (i in 1:total_samps) {
+  subsample <- c(sample(X[,1], sim_power[j,1]))
+  sample_means[i] = mean(subsample)
+  }
+  sim_power[j,2] <- mean(sample_means)
+  sim_power[j,3] <- st_dev/(sim_power[j,1]^.5)
+  sim_power[j,4] <- quantile(sample_means, 0.05) #5 percent of the mean at sample size (max 100) would be at this percentile
+}
+
+sim_power %>%
+  filter(fifth_percent>=9) %>% #all sample sizes where the fifth percentile is greater than or equal to 9
+  filter(fifth_percent==min(fifth_percent)) %>% View
 
 
 # Question: Take a normal distribution with mu = 10 and variance of 9 (e.g., standard deviation of 3).  Simulate a population of 10,000.  What is the sample size needed to make the standard error of the sample mean sufficiently small so that no more than 5% of the sample means are less 9?

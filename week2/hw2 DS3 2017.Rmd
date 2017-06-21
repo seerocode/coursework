@@ -21,6 +21,7 @@ library(plyr)
 library(tidyr)
 library(ggplot2)
 library(reshape2)
+library(boot)
 
 setwd("~/coursework/week2/")
 oj <- read.csv("oj.csv")
@@ -62,7 +63,6 @@ ln_reg = glm(formula = logmove ~ log(price) * feat, data = df)
 summary(ln_reg)
 
 #6b. Adding brand to regression
-ln_reg = glm(formula = logmove ~ log(price) * feat + brand, data = df)
 summary(ln_reg)
 
 #6c. Estimate brand impact

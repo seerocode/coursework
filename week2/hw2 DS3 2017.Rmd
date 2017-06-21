@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## R Markdown
@@ -13,19 +13,8 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
 
 library(dplyr)
 library(plyr)
@@ -33,9 +22,64 @@ library(tidyr)
 library(ggplot2)
 library(reshape2)
 
-glm(formula = logmove - log(price) * feat + brand, data = oj)
+setwd("~/coursework/week2/")
+oj <- read.csv("oj.csv")
+#colnames(mydata)[1-17]
+df <- data.frame(oj)
+
+# glm(formula = logmove - log(price) * feat + brand, data = oj)
 #logmove = outcome
 #estimate if it's featured (feat)
 # estmatrif looking at each brand (brand)
 # log(price) = estimate of price 
 #log(price):feat = how price sensitive are poeple
+
+# 4a. Box Plot of Price
+ggplot(df, aes(1, price)) + #1 for just 1 brand
+  geom_boxplot()
+
+# 4b. Box plot of log price
+ggplot(df, aes(1, log(price))) + 
+  geom_boxplot() +
+  labs(x = "OJ Brand", y = "Price")
+
+# 4c. Box Plot of Price per Brand
+ggplot(df, aes(factor(brand), price)) +
+  geom_boxplot(aes(fill = factor(brand))) +
+  labs(x = "OJ Brand", y = "Price")
+
+# 4d. Box plot of logprice per brand
+ggplot(df, aes(factor(brand), log(price))) + 
+  geom_boxplot(aes(fill = factor(brand))) +
+  labs(x = "OJ Brand", y = "Price")
+
+# 5.
+ggplot(df, aes(logmove, log(price))) +
+         geom_point(aes(color = factor(brand)))
+         
+# 6a. Regression of log quantity on log price [baseline model]
+ln_reg = glm(formula = logmove ~ log(price) * feat, data = df)
+summary(ln_reg)
+
+#6b. Adding brand to regression
+ln_reg = glm(formula = logmove ~ log(price) * feat + brand, data = df)
+summary(ln_reg)
+
+#6c. Estimate brand impact
+ln_reg = glm(formula = logmove ~ log(price) * brand, data = df)
+summary(ln_reg)
+#add log(price) + logprice of other brandr
+#Coefficients:
+#                            Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)                 10.95468    0.02070 529.136   <2e-16 ***
+#log(price)                  -3.37753    0.03619 -93.322   <2e-16 ***
+#brandminute.maid             0.88825    0.04155  21.376   <2e-16 ***
+#brandtropicana               0.96239    0.04645  20.719   <2e-16 ***
+#log(price):brandminute.maid  0.05679    0.05729   0.991    0.322    
+#log(price):brandtropicana    0.66576    0.05352  12.439   <2e-16 ***
+#---
+#Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+oj_dummy <- cbind(df, model.matrix(~factor(df$brand)-1)) %>% View
+
+```

@@ -1,0 +1,109 @@
+---
+title: "OJ_HW_2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+```{r}
+
+library(dplyr)
+library(plyr)
+library(tidyr)
+library(ggplot2)
+library(reshape2)
+library(boot)
+
+setwd("~/coursework/week2/")
+oj <- read.csv("oj.csv")
+#colnames(mydata)[1-17]
+df <- data.frame(oj)
+
+# glm(formula = logmove - log(price) * feat + brand, data = oj)
+#logmove = outcome
+#estimate if it's featured (feat)
+# estmatrif looking at each brand (brand)
+# log(price) = estimate of price 
+#log(price):feat = how price sensitive are poeple
+
+         
+# Brand and fetaure model
+ln_reg = lm(formula = logmove ~ log(price) * brand * feat, data = df)
+summary(ln_reg)
+
+#Add demos
+ln_reg2 = glm(formula = logmove ~ log(price) * brand * feat +
+               AGE60 + EDUC + ETHNIC + INCOME + HHLARGE + WORKWOM +
+               HVAL150 + SSTRDIST + SSTRVOL + CPDIST5 + CPWVOL5, data = df)
+summary(ln_reg)
+
+# K-fold cross-validation at 5
+set.seed(17)
+cv.error.5=rep(0,5)
+for (i in 1:5) {
+  glm.fit=glm(formula = logmove ~ log(price) * brand * feat +
+               AGE60 + EDUC + ETHNIC + INCOME + HHLARGE + WORKWOM +
+               HVAL150 + SSTRDIST + SSTRVOL + CPDIST5 + CPWVOL5, data = df)
+  cv.error.5[i]=cv.glm(df, glm.fit ,K=5)$delta[1]
+}
+cv.error.5
+mean(cv.error.5)
+
+
+exp(coef(ln_reg2)["HVAL150"]*summary(df$HVAL150)["3rd Qu."]-
+                                       summary(df$HVAL150)["Median"])
+
+
+exp(coef(ln_reg2)["WORKWOM"]*summary(df$WORKWOM)["3rd Qu."]-
+                                       summary(df$WORKWOM)["Median"])
+
+
+### interaction term
+ln_reg3 = glm(formula = logmove ~ log(price) * brand * feat +
+               log(price)*WORKWOM + log(price)*HVAL150, data = df)
+summary(ln_reg3)
+
+coef(ln_reg3)["WORKWOM"]
+coef(ln_reg3)["HVAL150"]
+
+coef(ln_reg3)["log(price):WORKWOM"]
+coef(ln_reg3)["log(price):HVAL150"]
+
+
+df1 <- df
+df1$week<-df1$week+1
+#add week 2 add as an exercise
+#	df1 now has NEXT week and not the current one. If we merge this by #weeks now, this is last week's price (e.g., "lagged price"). 
+myvars <- c("price", "week", "brand","store")
+df1 <- df1[myvars]
+oj_with_lagged_prices <- merge(oj, df1, by=c("brand","store","week"))
+#pricey = last week
+
+
+
+#log price(
+ln_regres_pxy <- glm(formula = logmove ~ price.x + price.y * feat * brand * log(price.x)*ETHNIC * log(price.x)*HVAL150 + log(price.x)*WORKWOM * log(price.x)*HVAL150 *log(price.x)*EDUC, data = oj_with_lagged_prices)
+summary(ln_regres)
+
+#
+set.seed(17)
+cv.error.5=rep(0,5)
+for (i in 1:5) {
+  glm.fit= ln_regres_pxy
+  cv.error.5[i]=cv.glm(oj_with_lagged_prices, glm.fit ,K=5)$delta[1]
+}
+cv.error.5
+mean(cv.error.5)
+
+
+
+```

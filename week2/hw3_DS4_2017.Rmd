@@ -18,27 +18,32 @@ When you click the **Knit** button a document will be generated that includes bo
 
 library(dplyr)
 library(plyr)
-library(tidyr)
 library(ggplot2)
-library(reshape2)
+#library(reshape2)
 library(boot)
+#library(doBy)
+library(tidyr)
+library(glmnet)
+
 
 setwd("~/coursework/week2/")
-oj <- read.csv("oj.csv")
-#colnames(mydata)[1-17]
-df <- data.frame(oj)
+sat<- read.csv("sat.csv")
+colnames(sat)
 
-# glm(formula = logmove - log(price) * feat + brand, data = oj)
-#logmove = outcome
-#estimate if it's featured (feat)
-# estmatrif looking at each brand (brand)
-# log(price) = estimate of price 
-#log(price):feat = how price sensitive are poeple
-
+#Took SAT Score
+summary(filter(sat, satobs == 1))
+#Didn't take SAT Score
+summary(filter(sat, satobs == 0))
          
-# Brand and fetaure model
-ln_reg = lm(formula = logmove ~ log(price) * brand * feat, data = df)
+# Left hand side is what we are predicting
+ln_reg = lm(formula = satobs ~ rank + mlhs + mcol + flhs + fcol + black + hisp + asian +
+              female + rdsc + vocab + matsc + nsib, data = sat)
 summary(ln_reg)
+confint(ln_reg)
+exp(coef(ln_reg))
+exp(confint(ln_reg))
+
+predict(ln_reg, type="response")
 
 #Add demos
 ln_reg2 = glm(formula = logmove ~ log(price) * brand * feat +
@@ -104,44 +109,6 @@ for (i in 1:5) {
 cv.error.5
 mean(cv.error.5)
 
- 
- ####### a.	Run a LASSO model for the same model cross validated OLS that gave you the lowest MSE. 
-  y <- as.matrix(oj_with_lagged_prices[ ,c("logmove")]) #because logmove goes on left
-  #x <- as.matrix(oj[ ,c("AGE60" ,"EDUC", "ETHNIC" ,  "INCOME" ,  "HHLARGE",  "WORKWOM" , "HVAL150" ,"SSTRDIST", "SSTRVOL" ,"CPWVOL5",  "ln_price", "feat", "ln_price_lag", "ln_price_int_feat")])
-  x <- model.matrix(logmove ~ price.x + price.y * feat * brand * log(price.x)*ETHNIC * log(price.x)*HVAL150 + log(price.x)*WORKWOM * log(price.x)*HVAL150 *log(price.x)*EDUC *log(price.x)*AGE60, data = oj_with_lagged_prices)
 
-  lasso_model = cv.glmnet(x, y, alpha=1)
-  plot(lasso_model)
-  
-  #lasso_model_ridge = cv.glmnet(x, y, alpha=.5)
-  #plot(lasso_model_ridge)
-  
-  #######################################
-  
-  coef(lasso_model)
-  
-  
-   samp_train <- sample_frac(oj_with_lagged_prices, .90)
-    y <- as.matrix(samp_train[ ,c("logmove")]) #because logmove goes on left
-  x <- model.matrix(logmove ~ price.x + price.y * feat * brand * log(price.x)*ETHNIC * log(price.x)*HVAL150 + log(price.x)*WORKWOM *   log(price.x)*HVAL150 *log(price.x)*EDUC *log(price.x)*AGE60, data = samp_train)
-
-  lasso_model_train = cv.glmnet(x, y, alpha=1)
-  predict(lasso_model_train, newx = x[1:5,], s = "lambda.min") #train
-  
-  
-  
-  
-  samp_test <- sample_frac(oj_with_lagged_prices, .10)
-  
-      y <- as.matrix(samp_test[ ,c("logmove")]) #because logmove goes on left
-  x <- model.matrix(logmove ~ price.x + price.y * feat * brand * log(price.x)*ETHNIC * log(price.x)*HVAL150 + log(price.x)*WORKWOM *   log(price.x)*HVAL150 *log(price.x)*EDUC *log(price.x)*AGE60, data = samp_test)
-  
-  lasso_model_test = cv.glmnet(x,y, alpha=1)
-  predict(lasso_model_test, newx = x[1:5,], s = "lambda.min")
-  
-  
-
-  
-  
 
 ```

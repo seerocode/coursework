@@ -24,8 +24,13 @@ We analyzed the data and made a figure
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ```{r pressure, echo=FALSE}
 plot(pressure)
+=======
+```{r plot, echo=FALSE}
+plot(plt)
+>>>>>>> 4c1311f18b80773052258b9264b35cee6a613a58
 =======
 ```{r plot, echo=FALSE}
 plot(plt)

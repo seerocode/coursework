@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 library(ggplot2)
 library(plyr)
 library(tidyverse)
@@ -41,7 +42,7 @@ mutate(perc_days = days_used/as.numeric(due_date - effective_date + 1)) %>%
 
 
 save(pval, plt, file="outputs.RData")
-=======
+
 library(ggplot2)
 df = data.frame(id = 1:100)
 df$x = df$id/10
@@ -56,4 +57,3 @@ pval = summary(ols)$coefficients[2,4]
 plt = ggplot(data=df, aes(x=x, y=y))+geom_point()
 
 save(pval, plt, file="outputs.RData")
->>>>>>> 4c1311f18b80773052258b9264b35cee6a613a58
